@@ -42,12 +42,8 @@ foreach ($marketsData as $row){
 
 echo "Success Count : $successCount<br>";
 echo "Error Count : $errorCount<br>";
-echo '<a href="'.$file_name.'">Excel File</a>';
+echo '<a href="'.$file_name.'">Excel File</a><br>';
+echo '<a href="view.php">View Graph</a><br>';
 exit;
-
-echo '<pre>';
-print_r($marketsData);
-echo '</pre>';
-exit;
-
 ?>
+
