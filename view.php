@@ -43,14 +43,22 @@ foreach ($marketDataByDate as $row){
             <a class="navbar-brand" href="index.php">CoinMarketCap</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a href="index.php">Home</a></li>
+            <li class="active"><a href="index.php">HOME</a></li>
             <li><a href="view.php?pair=BTC_USDT">BTC/USDT</a></li>
             <li><a href="view.php?pair=ETH_USDT">ETH/USDT</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">UPDATE DATA
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="get_data.php?pair=BTC_USDT">BTC</a></li>
+                    <li><a href="get_data.php?pair=ETH_USDT">ETH</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
 </nav>
 <br>
-<div class="text-center"><a href="downloadcsv.php">Download CSV File</a><br></div>
 <div id="containerBarChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 <br><br>
 <div id="containerLineChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>

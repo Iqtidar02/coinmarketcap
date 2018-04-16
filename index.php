@@ -21,17 +21,30 @@ require_once('autoload.php');
             <a class="navbar-brand" href="index.php">CoinMarketCap</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a href="index.php">Home</a></li>
+            <li class="active"><a href="index.php">HOME</a></li>
             <li><a href="view.php?pair=BTC_USDT">BTC/USDT</a></li>
             <li><a href="view.php?pair=ETH_USDT">ETH/USDT</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">UPDATE DATA
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="get_data.php?pair=BTC_USDT">BTC</a></li>
+                    <li><a href="get_data.php?pair=ETH_USDT">ETH</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
 </nav>
 
-<div class="container-fluid">
+<div class="container-fluid text-center">
     <h2>Home</h2>
-    <br><br><br>
+    <br>
+    <a href="view.php?pair=BTC_USDT" class="btn btn-default btn-lg">BTC - USDT</a>
+    <a href="view.php?pair=ETH_USDT" class="btn btn-default btn-lg">ETH - USDT</a>
 </div>
 
 </body>
 </html>
+
+                     
