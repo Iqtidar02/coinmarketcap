@@ -40,7 +40,7 @@ foreach ($marketDataByDate as $row){
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">CoinMarketCap</a>
+            <a class="navbar-brand" href="index.php">CoinMarketCap</a>
         </div>
         <ul class="nav navbar-nav">
             <li><a href="index.php">Home</a></li>

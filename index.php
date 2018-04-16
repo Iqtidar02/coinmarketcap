@@ -18,7 +18,7 @@ require_once('autoload.php');
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">CoinMarketCap</a>
+            <a class="navbar-brand" href="index.php">CoinMarketCap</a>
         </div>
         <ul class="nav navbar-nav">
             <li class="active"><a href="index.php">Home</a></li>
@@ -27,6 +27,8 @@ require_once('autoload.php');
         </ul>
     </div>
 </nav>
+
+<h2>Home</h2>
 
 <br><br><br>
 
