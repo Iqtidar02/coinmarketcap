@@ -29,15 +29,30 @@ foreach ($marketDataByDate as $row){
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bitcoin Markets - Chart</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/series-label.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
 </head>
 <body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">CoinMarketCap</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="index.php">Home</a></li>
+            <li><a href="view.php?pair=BTC_USDT">BTC/USDT</a></li>
+            <li><a href="view.php?pair=ETH_USDT">ETH/USDT</a></li>
+        </ul>
+    </div>
+</nav>
+<br>
 <div class="text-center"><a href="downloadcsv.php">Download CSV File</a><br></div>
 <div id="containerBarChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-<br><br><br>
+<br><br>
 <div id="containerLineChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 <script>
 
@@ -64,7 +79,7 @@ foreach ($marketDataByDate as $row){
         tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            '<td style="padding:0"><b>{point.y:.1f} $</b></td></tr>',
             footerFormat: '</table>',
             shared: true,
             useHTML: true
@@ -108,7 +123,7 @@ foreach ($marketDataByDate as $row){
                 dataLabels: {
                     enabled: false
                 },
-                enableMouseTracking: false
+                enableMouseTracking: true
             }
         },
         series: [{
@@ -129,6 +144,5 @@ foreach ($marketDataByDate as $row){
     }
 </script>
 
-<div class="footer"><a href="index.php">Home</a></div>
 </body>
 </html>

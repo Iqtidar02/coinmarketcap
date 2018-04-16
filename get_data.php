@@ -39,5 +39,6 @@ foreach ($marketsData as $row){
 
 echo "Success Count : $successCount<br>";
 echo "Error Count : $errorCount<br>";
+echo "<a href='index.php'>Home</a><br>";
 exit;
 ?>
