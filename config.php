@@ -3,14 +3,10 @@
 $currencyPair = 'BTC/USDT';
 
 /* database*/
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "coinmarket";
-/*$servername = "us-cdbr-iron-east-05.cleardb.net";
+$servername = "us-cdbr-iron-east-05.cleardb.net";
 $username = "b043de9dd162f7";
 $password = "6e89345b";
-$database = "heroku_d2683a7c6e5419a";*/
+$database = "heroku_d2683a7c6e5419a";
 
 $conn = new mysqli($servername, $username, $password, $database);
 
