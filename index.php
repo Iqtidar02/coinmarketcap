@@ -28,11 +28,10 @@ require_once('autoload.php');
     </div>
 </nav>
 
-<h2>Home</h2>
-
-<br><br><br>
+<div class="container-fluid">
+    <h2>Home</h2>
+    <br><br><br>
+</div>
 
 </body>
 </html>
-
-                     
