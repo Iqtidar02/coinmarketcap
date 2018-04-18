@@ -17,8 +17,14 @@ foreach ($marketData as $item){
     $volumes[] = intval($item['volume_24h']);
 }
 $dates = array();$dateVolumes = array();
+$prevWeekTimeStamp = time() - 604800;
+$weekTotalVolume = 0;
 foreach ($marketDataByDate as $row){
     $dates[] = date('Y-m-d',strtotime($row['date']));
+    $dateTimeStamp = strtotime($row['date']);
+    if($dateTimeStamp>=$prevWeekTimeStamp){
+        $weekTotalVolume+=intval($row['volume_24h']);
+    }
     $dateVolumes[] = intval($row['volume_24h']);
 }
 ?>
@@ -84,13 +90,24 @@ foreach ($marketDataByDate as $row){
                 text: ''
             }
         },
-        tooltip: {
+       /* tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:.1f} $</b></td></tr>',
+            '<td style="padding:0"><b>${point.y}</b></td></tr>',
             footerFormat: '</table>',
             shared: true,
             useHTML: true
+        },*/
+        tooltip: {
+            formatter: function () {
+                console.log(this);
+                var price = this.points[0].y.toFixed(0).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+                var volume = this.points[1].y.toFixed(0).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+                var key = this.x;
+                return '<span><b>'+key+'</b></span><br><table><tr><td>Price: $'+price+'</td></tr><br><tr><td>Volume: $'+volume+'</td></tr></table>';
+
+            },
+            shared: true
         },
         plotOptions: {
             column: {
@@ -116,7 +133,17 @@ foreach ($marketDataByDate as $row){
             text: 'Volume Data - <?=$currencyPair?>'
         },
         subtitle: {
-            text: 'Source: coinmarketcap.com'
+            text: 'Source: coinmarketcap.com <br>Total Volume: $<?=number_format($weekTotalVolume)?>'
+        },
+        tooltip: {
+            formatter: function () {
+                console.log(this);
+                var date = this.x;
+                var volume = this.y.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+                return '<span>'+date+' - $'+volume+'</span>';
+
+            },
+            shared: true
         },
         xAxis: {
             categories: <?=json_encode(array_values($dates))?>
