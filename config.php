@@ -96,12 +96,31 @@ if (!function_exists('get_market_data_by_date')){
     }
 }
 
+if (!function_exists('get_market_volume_diff_by_date')){
+    function get_market_volume_diff_by_date(){
+        global $conn;
+        global  $currencyPair;
+        $data = array();
+        $sql = "SELECT * FROM `marketsdata` m WHERE pair='{$currencyPair}' AND date >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY DATE(date) ORDER BY date ASC";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+        }
+        return $data;
+    }
+}
+
 if (!function_exists('dd')){
-    function dd($data){
+    function dd($data, $exit=true){
         echo '<pre>';
         print_r($data);
         echo '</pre>';
-        exit;
+        if($exit) {
+            exit;
+        }
     }
 }
 

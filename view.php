@@ -3,7 +3,7 @@ require_once 'autoload.php';
 $currencyPair = $_GET['pair'];$currencyPair = str_replace('_','/',$currencyPair);
 $marketData = get_latest_market_data();
 $marketDataByDate = get_market_data_by_date();
-
+$marketVolumeDiffByDate = get_market_volume_diff_by_date();
 $sources = array();
 foreach ($marketData as $item){
     $sources[] = $item['source'];
@@ -26,6 +26,17 @@ foreach ($marketDataByDate as $row){
         $weekTotalVolume+=intval($row['volume_24h']);
     }
     $dateVolumes[] = intval($row['volume_24h']);
+}
+
+$marketVolumeDiffDates = array();
+$marketVolumeDiff = array();
+for ($i=0;$i<sizeof($marketVolumeDiffByDate); $i++){
+    $marketVolumeDiff[$i] = intval($marketVolumeDiffByDate[$i]['volume_24h']);
+    $marketVolumeDiffDates[$i] = date('Y-m-d',strtotime($marketVolumeDiffByDate[$i]['date']));
+}
+$marketVolumeDiffCalculated = $marketVolumeDiff;
+for ($i=0;$i<sizeof($marketVolumeDiff)-1; $i++){
+    $marketVolumeDiffCalculated[$i+1] -= $marketVolumeDiff[$i];
 }
 ?>
 
@@ -67,7 +78,10 @@ foreach ($marketDataByDate as $row){
 <br>
 <div id="containerBarChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 <br><br>
+<div id="containerDiffBarChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<br><br>
 <div id="containerLineChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
 <script>
 
     Highcharts.chart('containerBarChart', {
@@ -75,7 +89,7 @@ foreach ($marketDataByDate as $row){
             type: 'column'
         },
         title: {
-            text: 'Bitcoin Markets <?=$currencyPair?>'
+            text: 'Market History <?=$currencyPair?>'
         },
         subtitle: {
             text: 'Source: coinmarketcap.com'
@@ -100,9 +114,8 @@ foreach ($marketDataByDate as $row){
         },*/
         tooltip: {
             formatter: function () {
-                console.log(this);
-                var price = this.points[0].y.toFixed(0).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-                var volume = this.points[1].y.toFixed(0).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+                var price = this.points[0].y.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+                var volume = this.points[1].y.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
                 var key = this.x;
                 return '<span><b>'+key+'</b></span><br><table><tr><td>Price: $'+price+'</td></tr><br><tr><td>Volume: $'+volume+'</td></tr></table>';
 
@@ -124,6 +137,39 @@ foreach ($marketDataByDate as $row){
         }]
     });
 
+    Highcharts.chart('containerDiffBarChart', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Market Volume Difference <?=$currencyPair?>'
+        },
+        xAxis: {
+            categories: <?=json_encode(array_values($marketVolumeDiffDates))?>
+        },
+        yAxis: {
+            title: {
+                text: 'Volume ($)'
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        tooltip: {
+            formatter: function () {
+                var date = this.x;
+                var volume = this.y.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+                return '<span>'+date+'</span><br><span>Volume: $'+volume+'</span>';
+
+            },
+            shared: true
+        },
+        series: [{
+            name: 'Date',
+            data: <?=json_encode(array_values($marketVolumeDiffCalculated))?>
+        }]
+    });
+
 
     Highcharts.chart('containerLineChart', {
         chart: {
@@ -137,7 +183,6 @@ foreach ($marketDataByDate as $row){
         },
         tooltip: {
             formatter: function () {
-                console.log(this);
                 var date = this.x;
                 var volume = this.y.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
                 return '<span>'+date+' - $'+volume+'</span>';
