@@ -96,8 +96,8 @@ if (!function_exists('get_market_data_by_date')){
     }
 }
 
-if (!function_exists('get_market_volume_diff_by_date')){
-    function get_market_volume_diff_by_date(){
+if (!function_exists('get_last_week_market_data')){
+    function get_last_week_market_data(){
         global $conn;
         global  $currencyPair;
         $data = array();

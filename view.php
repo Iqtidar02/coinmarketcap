@@ -1,9 +1,13 @@
 <?php
 require_once 'autoload.php';
 $currencyPair = $_GET['pair'];$currencyPair = str_replace('_','/',$currencyPair);
+
+/*-- Graph1 Start--*/
 $marketData = get_latest_market_data();
-$marketDataByDate = get_market_data_by_date();
-$marketVolumeDiffByDate = get_market_volume_diff_by_date();
+$latestDataDate = '';
+if(!empty($marketData[0])){$latestDataDate=$marketData[0]['date'];}
+$marketDataByDate = get_last_week_market_data();
+$marketVolumeDiffByDate = $marketDataByDate;
 $sources = array();
 foreach ($marketData as $item){
     $sources[] = $item['source'];
@@ -16,18 +20,10 @@ $volumes = array();
 foreach ($marketData as $item){
     $volumes[] = intval($item['volume_24h']);
 }
-$dates = array();$dateVolumes = array();
-$prevWeekTimeStamp = time() - 604800;
-$weekTotalVolume = 0;
-foreach ($marketDataByDate as $row){
-    $dates[] = date('Y-m-d',strtotime($row['date']));
-    $dateTimeStamp = strtotime($row['date']);
-    if($dateTimeStamp>=$prevWeekTimeStamp){
-        $weekTotalVolume+=intval($row['volume_24h']);
-    }
-    $dateVolumes[] = intval($row['volume_24h']);
-}
+/*-- Graph1 End--*/
 
+
+/*-- Graph2 Start--*/
 $marketVolumeDiffDates = array();
 $marketVolumeDiff = array();
 for ($i=0;$i<sizeof($marketVolumeDiffByDate); $i++){
@@ -38,6 +34,18 @@ $marketVolumeDiffCalculated = $marketVolumeDiff;
 for ($i=0;$i<sizeof($marketVolumeDiff)-1; $i++){
     $marketVolumeDiffCalculated[$i+1] -= $marketVolumeDiff[$i];
 }
+/*-- Graph2 End--*/
+
+
+/*-- Graph3 Start--*/
+$dates = array();$dateVolumes = array(); $weekTotalVolume = 0;
+foreach ($marketDataByDate as $row){
+    $dates[] = date('Y-m-d',strtotime($row['date']));
+    $weekTotalVolume+=intval($row['volume_24h']);
+    $dateVolumes[] = intval($row['volume_24h']);
+}
+/*-- Graph3 End--*/
+
 ?>
 
 <!DOCTYPE html>
@@ -92,7 +100,7 @@ for ($i=0;$i<sizeof($marketVolumeDiff)-1; $i++){
             text: 'Market History <?=$currencyPair?>'
         },
         subtitle: {
-            text: 'Source: coinmarketcap.com'
+            text: 'Source: coinmarketcap.com<br><?=$latestDataDate?>'
         },
         xAxis: {
             categories: <?=json_encode($sources)?>,
@@ -104,14 +112,14 @@ for ($i=0;$i<sizeof($marketVolumeDiff)-1; $i++){
                 text: ''
             }
         },
-       /* tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>${point.y}</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
-        },*/
+        /* tooltip: {
+         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+         '<td style="padding:0"><b>${point.y}</b></td></tr>',
+         footerFormat: '</table>',
+         shared: true,
+         useHTML: true
+         },*/
         tooltip: {
             formatter: function () {
                 var price = this.points[0].y.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
